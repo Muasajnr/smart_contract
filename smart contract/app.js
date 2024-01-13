@@ -1,14 +1,25 @@
 const express = require('express');
 const ethers = require('ethers');
 const fs = require('fs');
+const cors = require('cors');
 
 const app = express();
+app.use(cors()); // Enable CORS
 app.use(express.json());
 
 // Load the compiled contract artifacts
-const contractArtifacts = JSON.parse(fs.readFileSync('path/to/compiled/Contract.json', 'utf8'));
-const contractABI = contractArtifacts.abi;
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+try {
+    const contractArtifacts = JSON.parse(fs.readFileSync('MultiSender.json', 'utf8'));
+    const contractABI = contractArtifacts.abi;
+    const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+
+
+} catch (error) {
+    console.error('Error loading contract artifacts:', error.message);
+    process.exit(1); // Exit the application with an error code
+}
+
+
 
 // Connect to Ethereum node
 const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/0313adaf9afa4f939d83af53fc82cf99');
