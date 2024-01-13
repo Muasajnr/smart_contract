@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiSender Frontend</title>
+</head>
+<body>
+    <h1>MultiSender Frontend</h1>
+
+    <label for="recipients">Recipients (comma-separated):</label>
+    <input type="text" id="recipients" placeholder="Enter Recipients">
+
+    <label for="amounts">Amounts (comma-separated):</label>
+    <input type="text" id="amounts" placeholder="Enter Amounts">
+
+    <button onclick="sendTokens()">Send Tokens</button>
+
+    <script>
+        async function sendTokens() {
+            const recipients = document.getElementById("recipients").value.split(",");
+            const amounts = document.getElementById("amounts").value.split(",");
+
+            const response = await fetch('http://localhost:3000/sendTokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ recipients, amounts }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log('Transaction Hash:', result.transactionHash);
+                alert('Tokens sent successfully!');
+            } else {
+                console.error('Error:', result.error);
+                alert('Error: ' + result.error);
+            }
+        }
+    </script>
+</body>
+</html>
